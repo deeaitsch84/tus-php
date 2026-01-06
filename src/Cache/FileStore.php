@@ -23,7 +23,7 @@ class FileStore extends AbstractCache
      * @param string|null $cacheDir
      * @param string|null $cacheFile
      */
-    public function __construct(?string $cacheDir = null, string $cacheFile = null)
+    public function __construct(?string $cacheDir = null, ?string $cacheFile = null)
     {
         $cacheDir  = $cacheDir ?? Config::get('file.dir');
         $cacheFile = $cacheFile ?? Config::get('file.name');
@@ -85,10 +85,10 @@ class FileStore extends AbstractCache
      *
      * @return void
      */
-    protected function createCacheDir()
+    protected function createCacheDir(): void
     {
-        if ( ! file_exists($this->cacheDir)) {
-            mkdir($this->cacheDir);
+        if (!file_exists($this->cacheDir) && !mkdir($concurrentDirectory = $this->cacheDir) && !is_dir($concurrentDirectory)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
     }
 
@@ -97,7 +97,7 @@ class FileStore extends AbstractCache
      *
      * @return void
      */
-    protected function createCacheFile()
+    protected function createCacheFile(): void
     {
         $this->createCacheDir();
 
@@ -134,7 +134,7 @@ class FileStore extends AbstractCache
      *
      * @return mixed
      */
-    protected function lock(string $path, int $type = LOCK_SH, ?callable $cb = null, $fopenType = FILE::READ_BINARY)
+    protected function lock(string $path, int $type = LOCK_SH, ?callable $cb = null, $fopenType = FILE::READ_BINARY): mixed
     {
         $out    = false;
         $handle = @fopen($path, $fopenType);
@@ -188,7 +188,7 @@ class FileStore extends AbstractCache
      *
      * @return int|false
      */
-    public function put(string $path, string $contents, int $lock = LOCK_EX)
+    public function put(string $path, string $contents, int $lock = LOCK_EX): false|int
     {
         return file_put_contents($path, $contents, $lock);
     }
@@ -275,7 +275,7 @@ class FileStore extends AbstractCache
      *
      * @return array|bool
      */
-    public function getCacheContents()
+    public function getCacheContents(): bool|array
     {
         $cacheFile = $this->getCacheFile();
 
