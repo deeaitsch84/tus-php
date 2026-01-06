@@ -14,7 +14,7 @@
     }
   ],
   "require": {
-    "php": "8.4",
+    "php": ">=8.4",
     "ext-json": "*",
     "guzzlehttp/guzzle": "^7.2",
     "nesbot/carbon": "^2.67 || ^3.0",
