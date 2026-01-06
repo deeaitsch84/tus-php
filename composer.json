@@ -7,7 +7,11 @@
     {
       "name": "Ankit Pokhrel",
       "email": "oss@ankit.pl"
-    }
+    },
+    {
+      "name": "Dennis Haseloff",
+      "email": "dhaseloff@gmail.com"
+    },
   ],
   "require": {
     "php": "8.4",
